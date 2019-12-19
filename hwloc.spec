@@ -57,7 +57,7 @@ ln %{buildroot}%{_mandir}/man1/lstopo-no-graphics.1 %{buildroot}%{_mandir}/man1/
 
 # https://github.com/open-mpi/hwloc/issues/221
 %ifarch x86_64
-install -p %{buildroot}%{_unitdir}
+install -d %{buildroot}%{_unitdir}
 mv %{buildroot}%{_datadir}/%{name}/hwloc-dump-hwdata.service %{buildroot}%{_unitdir}/
 %else
 rm %{buildroot}%{_datadir}/%{name}/hwloc-dump-hwdata.service
