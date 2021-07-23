@@ -1,6 +1,6 @@
 Name:           hwloc
 Version:        1.11.9
-Release:        3
+Release:        4
 Summary:        Hardware locality utilities and libraries
 License:        BSD
 URL:            https://www.open-mpi.org/projects/hwloc/
@@ -79,8 +79,6 @@ LD_LIBRARY_PATH=$PWD/src/.libs make check
 %ldconfig_postun
 
 %files
-%dir %{_pkgdocdir}/
-%{_pkgdocdir}/*[^c]
 %{_bindir}/%{name}*
 %{_bindir}/lstopo*
 %dir %{_datadir}/%{name}
@@ -105,7 +103,12 @@ LD_LIBRARY_PATH=$PWD/src/.libs make check
 
 %files help
 %{_mandir}/man*/*
+%dir %{_pkgdocdir}/
+%{_pkgdocdir}/*[^c]
 
 %changelog
+* Thu Jul 22 2021 shixuantong <shixuantong@huawei.com> - 1.11.9-4
+- move %{_pkgdocdir} to help subpackage
+
 * Thu Nov 15 2019 chenzhenyu <chenzhenyu13@huawei.com> - 1.11.9-3
 - Package init
