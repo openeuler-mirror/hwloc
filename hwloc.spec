@@ -1,6 +1,6 @@
 Name:           hwloc
-Version:        1.11.9
-Release:        4
+Version:        2.2.0
+Release:        1
 Summary:        Hardware locality utilities and libraries
 License:        BSD
 URL:            https://www.open-mpi.org/projects/hwloc/
@@ -39,10 +39,10 @@ export runstatedir=/run
 %configure --enable-plugins --disable-silent-rules
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-%make_build
+make %{?_smp_mflags}
 
 %install
-%make_install
+make install DESTDIR=%{buildroot} INSTALL="%{__install} -p"
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 cp -p AUTHORS COPYING NEWS README VERSION %{buildroot}%{_pkgdocdir}
 cp -pr doc/examples %{buildroot}%{_pkgdocdir}
@@ -64,7 +64,7 @@ rm %{buildroot}%{_datadir}/%{name}/hwloc-dump-hwdata.service
 %endif
 
 %check
-LD_LIBRARY_PATH=$PWD/src/.libs make check
+LD_LIBRARY_PATH=$PWD/hwloc/.libs make check
 
 %ifarch x86_64
 %post
@@ -79,9 +79,15 @@ LD_LIBRARY_PATH=$PWD/src/.libs make check
 %ldconfig_postun
 
 %files
+%{_sysconfdir}/bash_completion.d/*
+%dir %{_pkgdocdir}/
+%{_pkgdocdir}/*[^c]
 %{_bindir}/%{name}*
 %{_bindir}/lstopo*
 %dir %{_datadir}/%{name}
+%{_datadir}/hwloc/hwloc-ps.www/
+%{_datadir}/hwloc/hwloc2.dtd
+%{_datadir}/hwloc/hwloc2-diff.dtd
 %{_datadir}/%{name}/%{name}.dtd
 %{_datadir}/%{name}/%{name}-valgrind.supp
 %{_datadir}/applications/lstopo.desktop
@@ -91,10 +97,11 @@ LD_LIBRARY_PATH=$PWD/src/.libs make check
 %endif
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/hwloc*
-%{_libdir}/libhwloc*so.5*
+%{_libdir}/libhwloc*so.15*
 
 %files devel
 %{_libdir}/pkgconfig/*
+%{_mandir}/man3/*
 %dir %{_includedir}/%{name}
 %{_includedir}/%{name}/*
 %{_includedir}/%{name}.h
@@ -103,10 +110,11 @@ LD_LIBRARY_PATH=$PWD/src/.libs make check
 
 %files help
 %{_mandir}/man*/*
-%dir %{_pkgdocdir}/
-%{_pkgdocdir}/*[^c]
 
 %changelog
+* Tue Mar 08 2022 misaka00251 <misaka00251@misakanet.cn> - 2.2.0-1
+- Upgrade version to 2.2.0
+
 * Thu Jul 22 2021 shixuantong <shixuantong@huawei.com> - 1.11.9-4
 - move %{_pkgdocdir} to help subpackage
 
